@@ -16,8 +16,7 @@ SANGRAHA=/home/bodoai/experiments/unsupervised/exp1/UnsupervisedMT/en-brx/indicl
 INDICTRANS_BT=/home/bodoai/IndicTrans2-data/BT_data/indic_synthetic/brx_Deva-eng_Latn/train.brx_Deva
 
 # get 100k lines from the INDICTRANS_BT
-head -1000000 $INDICTRANS_BT > dataset/eng-brx/train.brx_Deva_BT
-
+head -2000000 $INDICTRANS_BT > dataset/eng-brx/train.brx_Deva_BT
 cat $SANGRAHA dataset/eng-brx/temp.$TGT dataset/eng-brx/train.brx_Deva dataset/eng-brx/train.brx_Deva_BT > dataset/eng-brx/train.brx
 
 rm dataset/eng-brx/temp.$TGT
@@ -41,7 +40,7 @@ echo "processing train.$SRC"
 NUMBER_OF_LINES=$(wc -l < dataset/eng-brx/train.brx)
 
 # get the eng monolingual data
-head -$NUMBER_OF_LINES /home/bodoai/experiments/unsupervised/exp1/UnsupervisedMT/en-brx/en.txt > train.$SRC
+head -$NUMBER_OF_LINES /home/bodoai/experiments/unsupervised/exp1/UnsupervisedMT/en-brx/en.txt > dataset/eng-brx/train.eng
 
 # print the number of lines
 echo "Number of lines in train.$SRC: $NUMBER_OF_LINES"
@@ -52,5 +51,13 @@ VALID_TGT=/home/bodoai/IndicTrans2-data/flores-22_dev/all/eng_Latn-brx_Deva/dev.
 
 cat $VALID_SRC > dataset/eng-brx/dev/dev.$SRC
 cat $VALID_TGT > dataset/eng-brx/dev/dev.$TGT
+
+# getting test files
+TEST_SRC=/home/bodoai/IndicTrans2-data/IN22_testset/gen/test.eng_Latn
+TEST_TGT=/home/bodoai/IndicTrans2-data/IN22_testset/gen/test.brx_Deva
+
+cat $TEST_SRC > dataset/eng-brx/test/test.$SRC
+cat $TEST_TGT > dataset/eng-brx/test/test.$TGT
+
 
 
