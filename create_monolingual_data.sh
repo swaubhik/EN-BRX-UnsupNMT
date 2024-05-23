@@ -1,5 +1,7 @@
 # !/bin/bash
 # swaubhik 2024
+set -e
+
 SRC=eng
 TGT=brx
 # create dataset folder
@@ -17,30 +19,30 @@ INDICTRANS_BT=/home/bodoai/IndicTrans2-data/BT_data/indic_synthetic/brx_Deva-eng
 
 # get 100k lines from the INDICTRANS_BT
 head -2000000 $INDICTRANS_BT > dataset/eng-brx/train.brx_Deva_BT
-cat $SANGRAHA dataset/eng-brx/temp.$TGT dataset/eng-brx/train.brx_Deva dataset/eng-brx/train.brx_Deva_BT > dataset/eng-brx/train.brx
+cat $SANGRAHA dataset/eng-brx/temp.$TGT dataset/eng-brx/train.brx_Deva dataset/eng-brx/train.brx_Deva_BT > dataset/eng-brx/train/train.brx
 
 rm dataset/eng-brx/temp.$TGT
 rm dataset/eng-brx/train.brx_Deva
 rm dataset/eng-brx/train.brx_Deva_BT
 
 # remove duplicates
-awk '!seen[$0]++' dataset/eng-brx/train.brx > dataset/eng-brx/train.brx.tmp
-mv dataset/eng-brx/train.brx.tmp dataset/eng-brx/train.brx
+awk '!seen[$0]++' dataset/eng-brx/train/train.brx > dataset/eng-brx/train.brx.tmp
+mv dataset/eng-brx/train.brx.tmp dataset/eng-brx/train/train.brx
 
 # suffle the data
-shuf dataset/eng-brx/train.brx > dataset/eng-brx/train.brx.tmp
-mv dataset/eng-brx/train.brx.tmp dataset/eng-brx/train.brx
+shuf dataset/eng-brx/train/train.brx > dataset/eng-brx/train.brx.tmp
+mv dataset/eng-brx/train.brx.tmp dataset/eng-brx/train/train.brx
 
 # remove empty lines
-sed -i '/^$/d' dataset/eng-brx/train.brx
+sed -i '/^$/d' dataset/eng-brx/train/train.brx
 
 # count number of lines and save it on a variable
 echo "processing train.$SRC"
 
-NUMBER_OF_LINES=$(wc -l < dataset/eng-brx/train.brx)
+NUMBER_OF_LINES=$(wc -l < dataset/eng-brx/train/train.brx)
 
 # get the eng monolingual data
-head -$NUMBER_OF_LINES /home/bodoai/experiments/unsupervised/exp1/UnsupervisedMT/en-brx/en.txt > dataset/eng-brx/train.eng
+head -$NUMBER_OF_LINES /home/bodoai/experiments/unsupervised/exp1/UnsupervisedMT/en-brx/en.txt > dataset/eng-brx/train/train.eng
 
 # print the number of lines
 echo "Number of lines in train.$SRC: $NUMBER_OF_LINES"
@@ -58,6 +60,9 @@ TEST_TGT=/home/bodoai/IndicTrans2-data/IN22_testset/gen/test.brx_Deva
 
 cat $TEST_SRC > dataset/eng-brx/test/test.$SRC
 cat $TEST_TGT > dataset/eng-brx/test/test.$TGT
+
+# print the number of lines
+wc -l dataset/eng-brx/train/*
 
 
 
