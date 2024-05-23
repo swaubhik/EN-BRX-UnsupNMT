@@ -7,8 +7,8 @@ DATA_PATH=$PWD/dataset/eng-brx
 SRC_TOK=$DATA_PATH/train.tok.$SRC
 TGT_TOK=$DATA_PATH/train.tok.$TGT
 
-VALID_SRC=/home/bodoai/experiments/unsupervised/exp1/UnsupervisedMT/NMT/en-gb-data/para/dev/dev.en.tok
-VALID_TGT=/home/bodoai/experiments/unsupervised/exp1/UnsupervisedMT/NMT/en-gb-data/para/dev/dev.gb.tok
+VALID_SRC=$DATA_PATH/dev.tok.$SRC
+VALID_TGT=$DATA_PATH/dev.tok.$TGT
 
 UMT_PATH=$PWD
 TOOLS_PATH=$PWD/tools
@@ -20,7 +20,7 @@ UNDREAMT_PATH=$TOOLS_PATH/undreamt
 mkdir -p data/models
 mkdir -p data/validation_output
 # train the model
-CUDA_VISIBLE_DEVICES=1,2 python tools/undreamt/train.py \
+CUDA_VISIBLE_DEVICES=1 python tools/undreamt/train.py \
     --batch 50 \
     --src $SRC_TOK \
     --trg $TGT_TOK \
@@ -31,7 +31,7 @@ CUDA_VISIBLE_DEVICES=1,2 python tools/undreamt/train.py \
     --cuda \
     --validation $VALID_SRC $VALID_TGT \
     --validation_output data/validation_output/undreamt_model.valid \
-    --save_interval 100000 \
+    --save_interval 10000 \
   
 # save tmux log to a file
 echo "Training completed. Saving log to train.log"
